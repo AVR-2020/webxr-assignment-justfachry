@@ -5,51 +5,6 @@
     <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.js"></script>
     <script src="https://unpkg.com/aframe-event-set-component@^4.1.1/dist/aframe-event-set-component.min.js"></script>
     <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
-    <script src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js"></script>
-    <script>
-      // forward mouse and touch events to the super-hands entity
-      AFRAME.registerComponent("capture-mouse", {
-        init: function () {
-          this.eventRepeater = this.eventRepeater.bind(this);
-          this.el.sceneEl.addEventListener(
-            "loaded",
-            () => {
-              this.el.sceneEl.canvas.addEventListener(
-                "mousedown",
-                this.eventRepeater
-              );
-              this.el.sceneEl.canvas.addEventListener(
-                "mouseup",
-                this.eventRepeater
-              );
-              this.el.sceneEl.canvas.addEventListener(
-                "touchstart",
-                this.eventRepeater
-              );
-              this.el.sceneEl.canvas.addEventListener(
-                "touchmove",
-                this.eventRepeater
-              );
-              this.el.sceneEl.canvas.addEventListener(
-                "touchend",
-                this.eventRepeater
-              );
-            },
-            { once: true }
-          );
-        },
-        eventRepeater: function (evt) {
-          if (evt.type.startsWith("touch")) {
-            evt.preventDefault();
-            // avoid repeating touchmove because it interferes with look-controls
-            if (evt.type === "touchmove") {
-              return;
-            }
-          }
-          this.el.emit(evt.type, evt.detail);
-        },
-      });
-    </script>
   </head>
 
   <body>
@@ -57,6 +12,7 @@
       <a-entity environment="preset: checkerboard"
                 ground="flat">
       </a-entity>
+      <a-sound src="sounds/arcade.mp3" autoplay="true" volume="0.5" loop="true"></a-sound>
       <a-entity camera 
                 look-controls
                 wasd-controls 
@@ -91,7 +47,7 @@
             droppable
         ></a-gltf-model>
         <a-gltf-model src="assets/basketball/scene.gltf"
-            position="-3 3 -3" 
+            position="-2 3 -3" 
             body="type: dynamic; mass: 600; shape: sphere"
             radius="1"
             roughness="2"
@@ -119,31 +75,22 @@
           material="side: double"></a-entity>
       </a-entity>
 
-  <!-- wall -->
-  <!-- <a-box static-body position="10 0 0" width="50" height="100" color="#0000FF" rotation="0 -90 0"></a-box>
-  <a-box static-body position="-10 0 0" width="50" height="100" color="#0000FF" rotation="0 -90 0"></a-box>
-  <a-box static-body position="0 0 7" width="50" height="100" color="#0000FF" rotation="0 0 0"></a-box>
-  <a-box static-body position="0 0 -11.5" width="50" height="100" color="#0000FF" rotation="0 0 0"></a-box> -->
-
   <!-- net -->
-  <a-plane static-body wireframe="true" segments-height="100" segments-width="100" position="4 4 -5" width="20" height="16" rotation="0 -90 0"></a-plane>
-  <a-plane static-body wireframe="true" segments-height="100" segments-width="100" position="-4 4 -5" width="20" height="16" rotation="0 -90 0"></a-plane>
-  <a-plane static-body wireframe="true" segments-height="100" segments-width="100" position="0 12 -5" width="8" height="15" rotation="-90 0 0" color="#000000"></a-plane>
-  <a-plane static-body wireframe="true" segments-height="100" segments-width="100" position="0 4 5" width="8" height="16" rotation="0 0 0"></a-plane>
+  <a-plane static-body wireframe="true" segments-height="100" segments-width="100" position="3 4 -5" width="20" height="16" rotation="0 -90 0"></a-plane>
+  <a-plane static-body wireframe="true" segments-height="100" segments-width="100" position="-3 4 -5" width="20" height="16" rotation="0 -90 0"></a-plane>
+  <a-plane static-body wireframe="true" segments-height="100" segments-width="100" position="0 12 -5" width="6" height="15" rotation="-90 0 0" color="#000000"></a-plane>
+  <a-plane static-body wireframe="true" segments-height="100" segments-width="100" position="0 4 5" width="6" height="16" rotation="0 0 0"></a-plane>
 
-
-  <a-plane static-body position="0 3 -8" width ="8" height="17" rotation="-80 0 0" color="brown"></a-plane>
-  <a-plane static-body position="0 5 -12" width ="4" height="8" rotation="0 0 -90" color="brown"></a-plane>
-  <a-box static-body position="0 2.5 -1" width ="8" height="1" depth="0.1" rotation="20 0 0" color="brown"></a-box>
-  <a-box static-body position="0 0 0.3" width ="8" height="3" depth="0.1" rotation="0 0 0" color="brown"></a-box>
+  <!-- table -->
+  <a-plane static-body position="0 3 -8" width ="6" height="17" rotation="-80 0 0" color="brown"></a-plane>
+  <a-plane static-body position="0 5 -12" width ="4" height="6" rotation="0 0 -90" color="brown"></a-plane>
+  <a-box static-body position="0 2.5 -1" width ="6" height="1" depth="0.1" rotation="20 0 0" color="brown"></a-box>
+  <a-box static-body position="0 0 0.3" width ="6" height="3" depth="0.1" rotation="0 0 0" color="brown"></a-box>
 
   <a-sky color="blue"></a-sky>
-
+  <!-- light -->
   <a-entity light="color: #FFFFFFF; intensity: 1.5" position="0 4 2" rotation="30 0 0"></a-entity>
-
-  <a-sound src="assets/sounds/background.mp3" autoplay="true"></a-sound>
-  
-    
+  <!-- land -->
   <a-plane static-body visible="false" position="0 0 0" rotation="-90 0 0" width="4000" height="4000" roughness color="#7BC8A4"></a-plane>
     </a-scene>
   </body>
