@@ -1,0 +1,81 @@
+<head>
+    <title>ArBasket</title>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://unpkg.com/super-hands/dist/super-hands.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@^4.1.1/dist/aframe-event-set-component.min.js"></script>
+    <!-- <script src="https://unpkg.com/aframe-physics-extras/dist/aframe-physics-extras.min.js"></script> -->
+    <script src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js"></script>
+    <script>
+      // forward mouse and touch events to the super-hands entity
+      AFRAME.registerComponent("capture-mouse", {
+        init: function () {
+          this.eventRepeater = this.eventRepeater.bind(this);
+          this.el.sceneEl.addEventListener(
+            "loaded",
+            () => {
+              this.el.sceneEl.canvas.addEventListener(
+                "mousedown",
+                this.eventRepeater
+              );
+              this.el.sceneEl.canvas.addEventListener(
+                "mouseup",
+                this.eventRepeater
+              );
+              this.el.sceneEl.canvas.addEventListener(
+                "touchstart",
+                this.eventRepeater
+              );
+              this.el.sceneEl.canvas.addEventListener(
+                "touchmove",
+                this.eventRepeater
+              );
+              this.el.sceneEl.canvas.addEventListener(
+                "touchend",
+                this.eventRepeater
+              );
+            },
+            { once: true }
+          );
+        },
+        eventRepeater: function (evt) {
+          if (evt.type.startsWith("touch")) {
+            evt.preventDefault();
+            // avoid repeating touchmove because it interferes with look-controls
+            if (evt.type === "touchmove") {
+              return;
+            }
+          }
+          this.el.emit(evt.type, evt.detail);
+        },
+      });
+    </script>
+  </head>
+
+  <body>
+    <a-scene physics="gravity: -9.8" renderer="antialias: true">
+      <a-sphere
+      dynamic-body = "massa: 600"
+      grabbable
+      clickable
+      droppable
+      position="0 1.5 -5" 
+      radius="1.25" 
+      color="#EF2D5E"></a-sphere>
+      <a-plane static-body position="0 0 -4" rotation="-90 0 0" width="4000" height="4000" color="#7BC8A4"></a-plane>
+      <a-entity
+          camera
+          look-controls
+          wasd-controls
+          position="0 5 5"
+          capture-mouse
+          raycaster
+          cursor="rayOrigin:mouse"
+          body="type: static; shape: sphere; sphereRadius: 0.001"
+          super-hands="colliderEvent: raycaster-intersection;
+                     colliderEventProperty: els;
+                     colliderEndEvent:raycaster-intersection-cleared;
+                     colliderEndEventProperty: clearedEls;"
+          >></a-entity>
+    </a-scene>
+  </body>
