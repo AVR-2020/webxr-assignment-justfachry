@@ -4,7 +4,7 @@
     <script src="https://unpkg.com/super-hands/dist/super-hands.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.js"></script>
     <script src="https://unpkg.com/aframe-event-set-component@^4.1.1/dist/aframe-event-set-component.min.js"></script>
-    <!-- <script src="https://unpkg.com/aframe-physics-extras/dist/aframe-physics-extras.min.js"></script> -->
+    <script src="https://unpkg.com/aframe-environment-component@1.1.0/dist/aframe-environment-component.min.js"></script>
     <script src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js"></script>
     <script>
       // forward mouse and touch events to the super-hands entity
@@ -54,40 +54,89 @@
 
   <body>
     <a-scene physics="gravity: -9.8" renderer="antialias: true">
-        <a-entity>
+      <a-entity environment="preset: checkerboard"
+                ground="flat">
+      </a-entity>
+      <a-entity camera 
+                look-controls
+                wasd-controls 
+                position="0 5 2"
+                capture-mouse
+                raycaster
+                cursor="rayOrigin:mouse"
+                body="type: static; shape: sphere; sphereRadius: 0.001"
+                super-hands="colliderEvent: raycaster-intersection; colliderEventProperty: els; colliderEndEvent:raycaster-intersection-cleared; colliderEndEventProperty: clearedEls;">
+      </a-entity>
+      
+      <!-- bola -->
+      <a-entity>
         <a-gltf-model src="assets/basketball/scene.gltf"
-            position="1 1 -5" 
+            position="0 3 -3" 
             body="type: dynamic; mass: 600; shape: sphere"
-            radius="1.25"
-            scale="0.15 0.15 0.15"
+            radius="1"
+            roughness="2"
+            scale="0.08 0.08 0.08"
             grabbable
             clickable
             droppable
         ></a-gltf-model>
-</a-entity>
+        <a-gltf-model src="assets/basketball/scene.gltf"
+            position="2 3 -3" 
+            body="type: dynamic; mass: 600; shape: sphere"
+            radius="1"
+            roughness="2"
+            scale="0.08 0.08 0.08"
+            grabbable
+            clickable
+            droppable
+        ></a-gltf-model>
+        <a-gltf-model src="assets/basketball/scene.gltf"
+            position="-3 3 -3" 
+            body="type: dynamic; mass: 600; shape: sphere"
+            radius="1"
+            roughness="2"
+            scale="0.08 0.08 0.08"
+            grabbable
+            clickable
+            droppable
+        ></a-gltf-model>
+      </a-entity>
 
-      <!-- <a-sphere
-      dynamic-body="mass: 600"
-      grabbable
-      clickable
-      droppable
-      position="0 1.5 -5" 
-      radius="1.25" 
-      color="#EF2D5E"></a-sphere> -->
-      <a-plane static-body position="0 0 0" rotation="-90 0 0" width="4000" height="4000" color="#7BC8A4"></a-plane>
-      <a-entity
-          camera
-          look-controls
-          wasd-controls
-          position="0 5 5"
-          capture-mouse
-          raycaster
-          cursor="rayOrigin:mouse"
-          body="type: static; shape: sphere; sphereRadius: 0.001"
-          super-hands="colliderEvent: raycaster-intersection;
-                     colliderEventProperty: els;
-                     colliderEndEvent:raycaster-intersection-cleared;
-                     colliderEndEventProperty: clearedEls;"
-          >></a-entity>
+      <!-- ring basket -->
+      <a-entity>
+        <a-gltf-model src="assets/basketball_hoop/scene.gltf"
+            position="0 2 -16" 
+            body="type: static;"
+            scale="10 10 10"
+            rotation="0 -90 0"
+        ></a-gltf-model>
+        <a-entity geometry="primitive: ring; radiusInner: 1.1; radiusOuter: 1.25"
+          visible="true"
+          static-body
+          height="0.5"
+          position="0 7.3 -10.3"
+          rotation="-90 0 0"
+          material="side: double"></a-entity>
+      </a-entity>
+
+  <!-- wall -->
+  <!-- <a-box static-body position="10 0 0" width="50" height="100" color="#0000FF" rotation="0 -90 0"></a-box>
+  <a-box static-body position="-10 0 0" width="50" height="100" color="#0000FF" rotation="0 -90 0"></a-box>
+  <a-box static-body position="0 0 7" width="50" height="100" color="#0000FF" rotation="0 0 0"></a-box>
+  <a-box static-body position="0 0 -11.5" width="50" height="100" color="#0000FF" rotation="0 0 0"></a-box> -->
+
+  <!-- net -->
+  <a-plane static-body wireframe="true" segments-height="100" segments-width="100" position="4 4 -5" width="20" height="17" rotation="0 -90 0"></a-plane>
+  <a-plane static-body wireframe="true" segments-height="100" segments-width="100" position="-4 4 -5" width="20" height="17" rotation="0 -90 0"></a-plane>
+  <a-plane static-body wireframe="true" segments-height="100" segments-width="100" position="0 12 -5" width="8" height="15" rotation="-90 0 0" color="#000000"></a-plane>
+  
+  <a-plane static-body position="0 3 -8" width ="8" height="20" rotation="-80 0 0" color="brown"></a-plane>
+  <a-plane static-body position="0 5 -12" width ="4" height="8" rotation="0 0 -90" color="brown"></a-plane>
+  <a-box static-body position="0 2 -1" width ="8" height="1.5" depth="0.1" rotation="20 0 0" color="brown"></a-box>
+
+  <a-sky color="blue"></a-sky>
+  
+    
+  <a-plane static-body visible="false" position="0 0 0" rotation="-90 0 0" width="4000" height="4000" roughness color="#7BC8A4"></a-plane>
     </a-scene>
   </body>
